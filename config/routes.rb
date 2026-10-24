@@ -12,4 +12,8 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+
+  # Generate standard RESTful URLs for managing spending categories.
+  # The index route maps GET /categories to CategoriesController#index.
+  resources :categories
 end

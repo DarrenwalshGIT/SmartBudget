@@ -1,0 +1,14 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+
+# Sample Category records used by Rails automated tests.
+# Each category has a unique name to satisfy the PostgreSQL
+# case-insensitive uniqueness constraint.
+
+one:
+  name: Groceries
+  description: Household food and grocery shopping expenses
+
+two:
+  name: Transport
+  description: Public transport, fuel and travel expenses

@@ -1,0 +1,20 @@
+
+<%# This page displays the categories saved in PostgreSQL. %>
+
+<h1>Categories</h1>
+
+<p>Manage your SmartBudget spending categories.</p>
+
+<%# Display a helpful message when no categories exist. %>
+<% if @categories.empty? %>
+  <p>No categories have been created yet.</p>
+<% else %>
+  <%# Loop through the records retrieved by CategoriesController. %>
+  <ul>
+    <% @categories.each do |category| %>
+      <li>
+        <%= category.name %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>
