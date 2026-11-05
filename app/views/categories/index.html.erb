@@ -1,19 +1,22 @@
 
-<%# This page displays the categories saved in PostgreSQL. %>
-
+<%# Display the Categories heading and explain the page's purpose. %>
 <h1>Categories</h1>
 
 <p>Manage your SmartBudget spending categories.</p>
+
+<%# Link to the form for creating a new spending category. %>
+<%= link_to "New Category", new_category_path %>
 
 <%# Display a helpful message when no categories exist. %>
 <% if @categories.empty? %>
   <p>No categories have been created yet.</p>
 <% else %>
-  <%# Loop through the records retrieved by CategoriesController. %>
+  <%# Display all categories retrieved from PostgreSQL. %>
   <ul>
     <% @categories.each do |category| %>
       <li>
-        <%= category.name %>
+        <%# Link each category name to its details page. %>
+        <%= link_to category.name, category_path(category) %>
       </li>
     <% end %>
   </ul>

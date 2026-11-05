@@ -1,0 +1,10 @@
+
+<%# Display the information for one saved spending category. %>
+
+<h1><%= @category.name %></h1>
+
+<%# Show the category description when one has been supplied. %>
+<p><%= @category.description.presence || "No description provided." %></p>
+
+<%# Return to the list of spending categories. %>
+<%= link_to "Back to Categories", categories_path %>
