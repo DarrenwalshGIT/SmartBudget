@@ -31,8 +31,45 @@ class CategoriesController < ApplicationController
     @category = Category.find(params[:id])
   end
 
+  # EDIT: Find the existing category that the user wants to change.
+  # Rails uses the ID in the URL to retrieve it from PostgreSQL.
+  def edit
+    @category = Category.find(params[:id])
+  end
+
+  # UPDATE: Save changes to an existing spending category.
+  def update
+    # Find the category that was selected for editing.
+    @category = Category.find(params[:id])
+
+    # Update only the fields allowed by our strong parameters.
+    if @category.update(category_params)
+      # Redirect to the updated category's details page.
+      redirect_to @category, notice: "Category updated successfully."
+    else
+      # Show the editing form again if validation fails.
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
+  # DELETE: Remove an existing spending category from PostgreSQL.
+  def destroy
+    # Find the category using the ID included in the URL.
+    @category = Category.find(params[:id])
+
+    # Delete the category from the database.
+    @category.destroy!
+
+    # Return the user to the Categories list after deletion.
+    redirect_to categories_path,
+                notice: "Category deleted successfully.",
+                status: :see_other
+  end
+
   private
 
+  # Strong parameters allow only the name and description fields
+  # to be submitted when creating or updating a category.
   def category_params
     params.require(:category).permit(:name, :description)
   end

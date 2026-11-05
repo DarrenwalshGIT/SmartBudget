@@ -1,0 +1,38 @@
+<%# Allow users to edit an existing SmartBudget category. %>
+
+<h1>Edit Category</h1>
+
+<%# Rails automatically uses PATCH when editing a saved category. %>
+<%= form_with model: @category do |form| %>
+  <%# Display any validation errors if the updated data is invalid. %>
+  <% if @category.errors.any? %>
+    <div>
+      <h2>Please correct the following errors:</h2>
+      <ul>
+        <% @category.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%# Populate the name field with the category's current name. %>
+  <div>
+    <%= form.label :name %>
+    <%= form.text_field :name %>
+  </div>
+
+  <%# Populate the description field with its current value. %>
+  <div>
+    <%= form.label :description %>
+    <%= form.text_area :description %>
+  </div>
+
+  <%# Submit the changes to the UPDATE action. %>
+  <div>
+    <%= form.submit "Update Category" %>
+  </div>
+<% end %>
+
+<%# Allow users to return without saving changes. %>
+<%= link_to "Cancel", category_path(@category) %>

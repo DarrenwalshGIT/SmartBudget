@@ -7,4 +7,23 @@
 <p><%= @category.description.presence || "No description provided." %></p>
 
 <%# Return to the list of spending categories. %>
+
+<%# Navigate to the editing form for this category. %>
+<p>
+  <%= link_to "Edit Category", edit_category_path(@category) %>
+</p>
+
+
+<%# Send a DELETE request for the currently displayed category. %>
+<%# Turbo handles the DELETE method and asks for confirmation. %>
+<p>
+  <%= button_to "Delete Category",
+                category_path(@category),
+                method: :delete,
+                data: {
+                  turbo_confirm: "Are you sure you want to delete this category?"
+                } %>
+</p>
+
+
 <%= link_to "Back to Categories", categories_path %>
