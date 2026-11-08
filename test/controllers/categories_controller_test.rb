@@ -63,19 +63,37 @@ class CategoriesControllerTest < ActionDispatch::IntegrationTest
 
   # DELETE: Verify that an existing category can be removed.
   # The database should contain one fewer category after deletion.
-  test "should destroy an existing category" do
-    # Retrieve an existing category from the test fixtures.
-    category = categories(:one)
 
-    # Verify that the DELETE request removes exactly one record.
+  # Categories can be deleted when they have no transactions.
+  test "should destroy an existing category" do
+    category = Category.create!(
+      name: "Temporary Category",
+      description: "Used to test category deletion"
+    )
+
     assert_difference("Category.count", -1) do
       delete category_path(category)
     end
 
-    # After deletion, return the user to the Categories listing.
     assert_redirected_to categories_path
-
-    # Confirm the deleted category no longer exists in PostgreSQL.
     assert_not Category.exists?(category.id)
+  end
+
+  # Prevent deleting categories that contain financial records.
+  test "should not destroy a category with transactions" do
+    category = categories(:one)
+
+    # Confirm the category has an associated transaction.
+    assert category.transactions.exists?
+
+    # Both the category and its transactions must remain unchanged.
+    assert_no_difference("Category.count") do
+      assert_no_difference("Transaction.count") do
+        delete category_path(category)
+      end
+    end
+
+    assert_redirected_to category_path(category)
+    assert Category.exists?(category.id)
   end
 end

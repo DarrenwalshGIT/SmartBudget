@@ -1,4 +1,3 @@
-
 # Handles requests for managing SmartBudget spending categories.
 # Each action corresponds to a page or operation in Categories CRUD.
 class CategoriesController < ApplicationController
@@ -52,19 +51,24 @@ class CategoriesController < ApplicationController
     end
   end
 
-  # DELETE: Remove an existing spending category from PostgreSQL.
-  def destroy
-    # Find the category using the ID included in the URL.
-    @category = Category.find(params[:id])
 
-    # Delete the category from the database.
-    @category.destroy!
+# Deletes a category only if it has no linked transactions.
+def destroy
+  @category = Category.find(params[:id])
 
-    # Return the user to the Categories list after deletion.
+  if @category.destroy
+    # Redirect to the category list after successful deletion.
     redirect_to categories_path,
                 notice: "Category deleted successfully.",
                 status: :see_other
+  else
+    # Keep categories that contain existing transactions.
+    redirect_to category_path(@category),
+                alert: "This category cannot be deleted because it has transactions.",
+                status: :see_other
   end
+end
+
 
   private
 

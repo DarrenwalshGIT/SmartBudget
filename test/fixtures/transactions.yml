@@ -1,0 +1,18 @@
+# Sample transactions used by SmartBudget automated tests.
+# Each record must satisfy the PostgreSQL database constraints.
+
+# Example expense linked to the first category fixture.
+one:
+  description: Weekly groceries
+  amount: 85.50
+  transaction_type: expense
+  transaction_date: 2026-11-08
+  category: one
+
+# Example income linked to the second category fixture.
+two:
+  description: Monthly salary
+  amount: 2500.00
+  transaction_type: income
+  transaction_date: 2026-11-08
+  category: two
