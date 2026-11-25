@@ -1,2 +1,131 @@
-<h1>Home#index</h1>
-<p>Find me in app/views/home/index.html.erb</p>
+
+<%# Dashboard showing household income, expenses and balance. %>
+
+<div class="mb-4">
+  <h1 class="fw-bold mb-1">Dashboard</h1>
+  <p class="text-muted">
+    Your household finances at a glance.
+  </p>
+</div>
+
+<%# Financial summary cards. %>
+<div class="row g-3 mb-4">
+  <div class="col-12 col-md-4">
+    <div class="card border-0 shadow-sm h-100">
+      <div class="card-body p-4">
+        <h2 class="h6 text-muted">Total Income</h2>
+        <p class="fs-3 fw-bold text-success mb-0">
+          <%= number_to_currency(@total_income, unit: "€") %>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-md-4">
+    <div class="card border-0 shadow-sm h-100">
+      <div class="card-body p-4">
+        <h2 class="h6 text-muted">Total Expenses</h2>
+        <p class="fs-3 fw-bold text-danger mb-0">
+          <%= number_to_currency(@total_expenses, unit: "€") %>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-md-4">
+    <div class="card border-0 shadow-sm h-100">
+      <div class="card-body p-4">
+        <h2 class="h6 text-muted">Remaining Balance</h2>
+        <p class="fs-3 fw-bold mb-0">
+          <%= number_to_currency(@balance, unit: "€") %>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<%# Display additional calculations from the BudgetCalculator library. %>
+<div class="row g-3 mb-4">
+  <div class="col-12 col-md-6">
+    <div class="card border-0 shadow-sm h-100">
+      <div class="card-body p-4">
+        <h2 class="h6 text-muted">Savings Rate</h2>
+        <p class="fs-3 fw-bold text-success mb-0">
+          <%= number_with_precision(@savings_rate, precision: 2) %>%
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-md-6">
+    <div class="card border-0 shadow-sm h-100">
+      <div class="card-body p-4">
+        <h2 class="h6 text-muted">Spending Percentage</h2>
+        <p class="fs-3 fw-bold text-primary mb-0">
+          <%= number_with_precision(@spending_percentage, precision: 2) %>%
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%# Display the five most recent transactions. %>
+<div class="card border-0 shadow-sm mb-4">
+  <div class="card-body p-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+      <h2 class="h5 fw-bold mb-0">Recent Transactions</h2>
+      <%= link_to "View All", transactions_path,
+                  class: "btn btn-outline-primary btn-sm" %>
+    </div>
+
+    <% if @recent_transactions.empty? %>
+      <p class="text-muted mb-0">
+        No transactions recorded yet.
+      </p>
+    <% else %>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th scope="col">Date</th>
+              <th scope="col">Description</th>
+              <th scope="col">Category</th>
+              <th scope="col" class="text-end">Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @recent_transactions.each do |transaction| %>
+              <tr>
+                <td>
+                  <%= transaction.transaction_date.strftime("%d %b %Y") %>
+                </td>
+                <td><%= transaction.description %></td>
+                <td><%= transaction.category.name %></td>
+                <td class="text-end fw-semibold">
+                  <% if transaction.transaction_type == "income" %>
+                    <span class="text-success">
+                      +<%= number_to_currency(transaction.amount, unit: "€") %>
+                    </span>
+                  <% else %>
+                    <span class="text-danger">
+                      -<%= number_to_currency(transaction.amount, unit: "€") %>
+                    </span>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<%# Quick links to the main SmartBudget features. %>
+<div class="d-flex flex-wrap gap-2">
+  <%= link_to "Add Transaction", new_transaction_path,
+              class: "btn btn-primary" %>
+  <%= link_to "Manage Categories", categories_path,
+              class: "btn btn-outline-secondary" %>
+</div>
