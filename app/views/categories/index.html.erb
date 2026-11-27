@@ -1,23 +1,62 @@
 
-<%# Display the Categories heading and explain the page's purpose. %>
-<h1>Categories</h1>
+<%# Displays the spending categories available in SmartBudget. %>
 
-<p>Manage your SmartBudget spending categories.</p>
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+  <div>
+    <h1 class="fw-bold mb-1">Categories</h1>
+    <p class="text-muted mb-0">
+      Organise your income and expenses into categories.
+    </p>
+  </div>
 
-<%# Link to the form for creating a new spending category. %>
-<%= link_to "New Category", new_category_path %>
+  <%= link_to "Add Category", new_category_path,
+              class: "btn btn-primary" %>
+</div>
 
-<%# Display a helpful message when no categories exist. %>
-<% if @categories.empty? %>
-  <p>No categories have been created yet.</p>
-<% else %>
-  <%# Display all categories retrieved from PostgreSQL. %>
-  <ul>
-    <% @categories.each do |category| %>
-      <li>
-        <%# Link each category name to its details page. %>
-        <%= link_to category.name, category_path(category) %>
-      </li>
+<div class="card border-0 shadow-sm">
+  <div class="card-body p-4">
+    <% if @categories.empty? %>
+      <%# Encourage users to create their first category. %>
+      <div class="text-center py-5">
+        <h2 class="h5">No categories yet</h2>
+
+        <p class="text-muted">
+          Create a category to start organising your transactions.
+        </p>
+
+        <%= link_to "Add Category", new_category_path,
+                    class: "btn btn-primary" %>
+      </div>
+    <% else %>
+      <%# Display existing categories with links to their details. %>
+      <div class="list-group list-group-flush">
+        <% @categories.each do |category| %>
+          <div class="list-group-item px-0 py-3">
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+              <div>
+                <h2 class="h6 fw-semibold mb-1">
+                  <%= link_to category.name,
+                              category_path(category),
+                              class: "text-decoration-none" %>
+                </h2>
+
+                <p class="text-muted small mb-0">
+                  <%= category.description.presence || "No description provided." %>
+                </p>
+              </div>
+
+              <%= link_to "View Details",
+                          category_path(category),
+                          class: "btn btn-outline-primary btn-sm" %>
+            </div>
+          </div>
+        <% end %>
+      </div>
     <% end %>
-  </ul>
-<% end %>
+  </div>
+</div>
+
+<div class="mt-4">
+  <%= link_to "View Transactions", transactions_path,
+              class: "btn btn-outline-secondary" %>
+</div>

@@ -1,29 +1,45 @@
 
-<%# Display the information for one saved spending category. %>
+<%# Displays a category and the available management actions. %>
 
-<h1><%= @category.name %></h1>
+<div class="row justify-content-center">
+  <div class="col-12 col-md-9 col-lg-7">
+    <div class="mb-4">
+      <h1 class="fw-bold mb-1">Category Details</h1>
+      <p class="text-muted">
+        View and manage this category.
+      </p>
+    </div>
 
-<%# Show the category description when one has been supplied. %>
-<p><%= @category.description.presence || "No description provided." %></p>
+    <div class="card border-0 shadow-sm">
+      <div class="card-body p-4">
+        <h2 class="h4 fw-bold mb-3"><%= @category.name %></h2>
 
-<%# Return to the list of spending categories. %>
+        <h3 class="h6 text-muted">Description</h3>
+        <p class="mb-4">
+          <%= @category.description.presence || "No description provided." %>
+        </p>
 
-<%# Navigate to the editing form for this category. %>
-<p>
-  <%= link_to "Edit Category", edit_category_path(@category) %>
-</p>
+        <div class="d-flex flex-wrap gap-2">
+          <%= link_to "Edit Category",
+                      edit_category_path(@category),
+                      class: "btn btn-primary" %>
 
+          <%# Deletion remains subject to the existing controller safeguards. %>
+          <%= button_to "Delete Category",
+                        category_path(@category),
+                        method: :delete,
+                        class: "btn btn-outline-danger",
+                        form: {
+                          data: {
+                            turbo_confirm: "Are you sure you want to delete this category?"
+                          }
+                        } %>
 
-<%# Send a DELETE request for the currently displayed category. %>
-<%# Turbo handles the DELETE method and asks for confirmation. %>
-<p>
-  <%= button_to "Delete Category",
-                category_path(@category),
-                method: :delete,
-                data: {
-                  turbo_confirm: "Are you sure you want to delete this category?"
-                } %>
-</p>
-
-
-<%= link_to "Back to Categories", categories_path %>
+          <%= link_to "Back to Categories",
+                      categories_path,
+                      class: "btn btn-outline-secondary" %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

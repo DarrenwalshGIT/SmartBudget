@@ -16,4 +16,7 @@ Rails.application.routes.draw do
   # Generate standard RESTful URLs for managing spending categories.
   # The index route maps GET /categories to CategoriesController#index.
   resources :categories
+
+  # Routes for managing income and expense transactions.
+  resources :transactions
 end
