@@ -1,3 +1,4 @@
+
 name: CI
 
 on:
@@ -20,10 +21,10 @@ jobs:
 
       - name: Scan for common Rails security vulnerabilities using static analysis
         run: bin/brakeman --no-pager
-      
+
       - name: Scan for known security vulnerabilities in gems used
         run: bin/bundler-audit
-      
+
   scan_js:
     runs-on: ubuntu-latest
 
@@ -43,6 +44,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       RUBOCOP_CACHE_ROOT: tmp/rubocop
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -134,6 +136,13 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
+
+      # Install Chrome and its matching driver for browser tests.
+      - name: Set up Chrome for system tests
+        uses: browser-actions/setup-chrome@v2
+        with:
+          chrome-version: '157'
+          install-chromedriver: true
 
       - name: Run System Tests
         env:
